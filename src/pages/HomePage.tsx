@@ -14,6 +14,18 @@ import { calculateStandings } from "../lib/standings";
 import { getMatches } from "../services/api";
 import type { Match, Team, Tiebreaker } from "../types";
 
+const compactClubNames: Record<string, string> = {
+  "serra-branca": "SEB",
+  treze: "TRZ",
+  campinense: "CAM",
+  "esporte-patos": "ESP",
+  "nacional-patos": "NAP",
+  "atletico-pb": "ATL",
+};
+
+export const compactClubName = (teamId: string, name: string) =>
+  compactClubNames[teamId] ?? name;
+
 export function getHomeTournamentState(
   teams: Team[],
   matches: Match[],
@@ -217,9 +229,20 @@ function ClubLabel({ team, side = "left" }: { team: Team; side?: "left" | "right
   const className = ["flex min-w-0 items-center gap-2", side === "right" ? "justify-end text-right" : ""].filter(Boolean).join(" ");
   return (
     <div className={className}>
-      {side === "right" && <span className="truncate font-bold">{team.name}</span>}
+      {side === "right" && <ClubName team={team} />}
       <TeamBadge team={team} size="xs" />
-      {side === "left" && <span className="truncate font-bold">{team.name}</span>}
+      {side === "left" && <ClubName team={team} />}
     </div>
+  );
+}
+
+function ClubName({ team }: { team: Team }) {
+  return (
+    <>
+      <span className="hidden truncate font-bold min-[431px]:inline">{team.name}</span>
+      <span className="truncate font-bold min-[431px]:hidden">
+        {compactClubName(team.id, team.name)}
+      </span>
+    </>
   );
 }
