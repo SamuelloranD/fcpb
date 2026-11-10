@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Play } from "lucide-react";
 import { copaTeams } from "../data";
 import { getChampionship, getMatches, getStandings } from "../services/api";
@@ -9,7 +9,10 @@ import { StandingsTable } from "../features/standings/StandingsTable";
 
 export function ChampionshipPage() {
   const { slug = "" } = useParams();
-  const [tab, setTab] = useState<"table" | "simulator">("table");
+  const [searchParams] = useSearchParams();
+  const [tab, setTab] = useState<"table" | "simulator">(
+    searchParams.get("tab") === "simulator" ? "simulator" : "table",
+  );
   const championship = useQuery({
     queryKey: ["championship", slug],
     queryFn: () => getChampionship(slug),

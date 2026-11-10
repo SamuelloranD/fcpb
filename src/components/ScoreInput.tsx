@@ -10,6 +10,8 @@ export function ScoreInput({
   className = "",
   inputClassName = "",
   ariaLabel,
+  showStepper = true,
+  selectOnFocus = false,
 }: {
   value: number | string;
   onChange: (value: string) => void;
@@ -17,6 +19,8 @@ export function ScoreInput({
   className?: string;
   inputClassName?: string;
   ariaLabel?: string;
+  showStepper?: boolean;
+  selectOnFocus?: boolean;
 }) {
   const changeBy = (delta: 1 | -1) =>
     onChange(String(stepScore(Number(value) || 0, delta)));
@@ -29,8 +33,9 @@ export function ScoreInput({
         type="number"
         value={value}
         onChange={(event) => onChange(event.target.value)}
+        onFocus={(event) => { if (selectOnFocus) event.currentTarget.select(); }}
       />
-      {!disabled && (
+      {!disabled && showStepper && (
         <span className="absolute inset-y-0 right-0 flex w-3 flex-col overflow-hidden rounded-r border-l border-slate-200 bg-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
           <button
             type="button"

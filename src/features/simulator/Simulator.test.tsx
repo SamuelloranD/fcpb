@@ -29,6 +29,10 @@ describe("Simulator", () => {
 
     expect(html.match(/>Limpar</g) ?? []).toHaveLength(2);
     expect(html.match(/>Sortear</g) ?? []).toHaveLength(2);
+    expect(html).toContain("grid-cols-[minmax(0,1fr)_minmax(420px,0.9fr)]");
+    expect(html).toContain('aria-label="Abrir simulador de rodadas"');
+    expect(html).toContain("hidden xl:block");
+    expect(html).toContain("xl:hidden");
   });
 
   it("creates knockout scores when Sortear is used", () => {

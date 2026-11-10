@@ -4,9 +4,9 @@ export function TeamBadge({
   size = "md",
 }: {
   team: Team;
-  size?: "sm" | "md";
+  size?: "xs" | "sm" | "md";
 }) {
-  const dimensions = size === "sm" ? "h-12 w-12 text-xs" : "h-14 w-14 text-sm";
+  const dimensions = size === "xs" ? "h-8 w-8 text-[9px]" : size === "sm" ? "h-12 w-12 text-xs" : "h-14 w-14 text-sm";
   return team.badgeUrl ? (
     <img
       className={`${dimensions} shrink-0 object-contain`}
