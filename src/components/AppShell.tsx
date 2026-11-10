@@ -1,21 +1,14 @@
 import type { PropsWithChildren } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowUpRight, Moon, Sun } from "lucide-react";
 
 export function AppShell({ children }: PropsWithChildren) {
-  const location = useLocation();
-  const championshipPath = "/campeonatos/copa-paraiba-2026";
-  const championshipActive = location.pathname.startsWith(championshipPath);
   const toggleTheme = () => document.documentElement.classList.toggle("dark");
-  const championshipClassName = [
-    "tab shrink-0 px-3 py-2 text-sm",
-    championshipActive ? "tab-active" : "",
-  ].filter(Boolean).join(" ");
 
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-20 border-b bg-[color:var(--surface)]/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:gap-4">
+        <div className="mx-auto flex h-16 max-w-7xl items-center px-4">
           <Link
             to="/"
             className="flex shrink-0 items-center"
@@ -27,15 +20,6 @@ export function AppShell({ children }: PropsWithChildren) {
               className="h-8 w-auto object-contain sm:h-10"
             />
           </Link>
-          <nav className="ml-1 flex min-w-0 items-center sm:ml-3">
-            <Link
-              to={championshipPath}
-              aria-current={championshipActive ? "page" : undefined}
-              className={championshipClassName}
-            >
-              Copa Paraíba
-            </Link>
-          </nav>
           <div className="ml-auto flex shrink-0">
             <button
               className="action-secondary !p-2"
