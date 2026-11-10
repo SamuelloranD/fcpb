@@ -18,19 +18,38 @@ const initialStandings: StandingRow[] = [{
 }];
 
 describe("simulationStore", () => {
+  let localItems: Map<string, string>;
+  let sessionItems: Map<string, string>;
+
   beforeEach(() => {
-    const storage = new Map<string, string>();
+    localItems = new Map<string, string>();
+    sessionItems = new Map<string, string>();
     Object.defineProperty(globalThis, "localStorage", {
       configurable: true,
       value: {
-        getItem: (key: string) => storage.get(key) ?? null,
-        setItem: (key: string, value: string) => storage.set(key, value),
+        getItem: (key: string) => localItems.get(key) ?? null,
+        setItem: (key: string, value: string) => localItems.set(key, value),
+      },
+    });
+    Object.defineProperty(globalThis, "sessionStorage", {
+      configurable: true,
+      value: {
+        getItem: (key: string) => sessionItems.get(key) ?? null,
+        setItem: (key: string, value: string) => sessionItems.set(key, value),
       },
     });
     useSimulationStore.setState({
       scenarios: {},
       knockoutScenarios: {},
+      knockoutStandings: {},
     });
+  });
+
+  it("persists simulations only for the current browser session", () => {
+    useSimulationStore.getState().setScore(championshipId, "m1", [2, 1]);
+
+    expect(sessionItems.get("fcpb-scenarios")).toContain('"m1":[2,1]');
+    expect(localItems.get("fcpb-scenarios")).toBeUndefined();
   });
 
   it("clears knockout scores when any standing changes", () => {
@@ -50,6 +69,17 @@ describe("simulationStore", () => {
 
   it("keeps the simulator available when browser storage is blocked", () => {
     Object.defineProperty(globalThis, "localStorage", {
+      configurable: true,
+      value: {
+        getItem: () => {
+          throw new Error("Storage blocked");
+        },
+        setItem: () => {
+          throw new Error("Storage blocked");
+        },
+      },
+    });
+    Object.defineProperty(globalThis, "sessionStorage", {
       configurable: true,
       value: {
         getItem: () => {

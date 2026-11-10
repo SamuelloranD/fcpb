@@ -31,14 +31,14 @@ interface SimulationStore {
 
 const readScenarios = (): Record<string, ScoreOverrides> => {
   try {
-    return JSON.parse(localStorage.getItem("fcpb-scenarios") ?? "{}");
+    return JSON.parse(sessionStorage.getItem("fcpb-scenarios") ?? "{}");
   } catch {
     return {};
   }
 };
 const writeStorage = (key: string, value: unknown) => {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    sessionStorage.setItem(key, JSON.stringify(value));
   } catch {
     // The simulation remains usable when browser storage is unavailable.
   }
@@ -47,7 +47,7 @@ const persist = (scenarios: Record<string, ScoreOverrides>) =>
   writeStorage("fcpb-scenarios", scenarios);
 const readKnockoutScenarios = (): Record<string, ScoreOverrides> => {
   try {
-    return JSON.parse(localStorage.getItem("fcpb-knockout-scenarios") ?? "{}");
+    return JSON.parse(sessionStorage.getItem("fcpb-knockout-scenarios") ?? "{}");
   } catch {
     return {};
   }
@@ -56,7 +56,7 @@ const persistKnockout = (scenarios: Record<string, ScoreOverrides>) =>
   writeStorage("fcpb-knockout-scenarios", scenarios);
 const readKnockoutStandings = (): Record<string, string> => {
   try {
-    return JSON.parse(localStorage.getItem("fcpb-knockout-standings") ?? "{}");
+    return JSON.parse(sessionStorage.getItem("fcpb-knockout-standings") ?? "{}");
   } catch {
     return {};
   }
