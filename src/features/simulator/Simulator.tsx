@@ -79,7 +79,7 @@ export function Simulator({
       </div>
 
       {isMobilePanelOpen && (
-        <div className="fixed inset-0 z-50 xl:hidden">
+        <div className="fixed inset-x-0 top-0 z-50 h-screen h-[100lvh] overflow-hidden overscroll-contain xl:hidden">
           <button
             type="button"
             aria-label="Fechar painel do simulador"
@@ -88,7 +88,7 @@ export function Simulator({
           />
           <aside
             aria-label="Painel do simulador de rodadas"
-            className="absolute inset-y-0 right-0 w-[clamp(17rem,76vw,19rem)] overflow-y-auto border-l bg-[var(--bg)] shadow-2xl"
+            className="absolute right-0 top-0 h-screen h-[100lvh] w-[clamp(17rem,76vw,19rem)] overflow-y-auto overscroll-contain border-l bg-[var(--bg)] shadow-2xl"
           >
             <RoundsPanel
               championship={championship}
