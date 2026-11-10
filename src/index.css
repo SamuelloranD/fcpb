@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: #f6f8f7;
+    --surface: #fff;
+    --ink: #14211b;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --accent: #147a4b;
+  }
+  .dark {
+    color-scheme: dark;
+    --bg: #0d1411;
+    --surface: #152019;
+    --ink: #eef7f1;
+    --muted: #94a3b8;
+    --line: #293b31;
+    --accent: #4ade80;
+  }
+  * {
+    @apply border-[var(--line)];
+  }
+  body {
+    @apply m-0 min-h-screen bg-[var(--bg)] font-sans text-[var(--ink)] antialiased;
+  }
+  button,
+  input {
+    font: inherit;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-field ring-offset-2 ring-offset-[var(--bg)];
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border bg-[var(--surface)] shadow-sm;
+  }
+  .tab {
+    @apply rounded-lg px-3 py-2 text-sm font-semibold text-[var(--muted)] transition hover:bg-emerald-50 hover:text-emerald-800 dark:hover:bg-emerald-950;
+  }
+  .tab-active {
+    @apply bg-emerald-700 text-white hover:bg-emerald-700 hover:text-white;
+  }
+  .action {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .action-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border bg-[var(--surface)] px-3 py-2 text-sm font-semibold text-[var(--ink)] transition hover:bg-emerald-50 dark:hover:bg-emerald-950;
+  }
+}
