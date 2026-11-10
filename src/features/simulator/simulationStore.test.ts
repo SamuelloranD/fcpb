@@ -67,4 +67,14 @@ describe("simulationStore", () => {
         .syncKnockoutStandings(championshipId, initialStandings),
     ).not.toThrow();
   });
+
+  it("does not update the store when the standings signature is unchanged", () => {
+    const store = useSimulationStore.getState();
+    store.syncKnockoutStandings(championshipId, initialStandings);
+    const standingsBeforeRepeat = useSimulationStore.getState().knockoutStandings;
+
+    store.syncKnockoutStandings(championshipId, initialStandings);
+
+    expect(useSimulationStore.getState().knockoutStandings).toBe(standingsBeforeRepeat);
+  });
 });

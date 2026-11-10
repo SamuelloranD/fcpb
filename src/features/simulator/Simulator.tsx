@@ -9,6 +9,8 @@ import { useSimulationStore } from "./simulationStore";
 
 export { formatMatchDate };
 
+const emptyScoreOverrides = {};
+
 export function Simulator({
   championship,
   teams,
@@ -22,7 +24,7 @@ export function Simulator({
 }) {
   const [isMobilePanelOpen, setIsMobilePanelOpen] = useState(false);
   const store = useSimulationStore();
-  const overrides = store.scenarios[championship.id] ?? {};
+  const overrides = store.scenarios[championship.id] ?? emptyScoreOverrides;
   const simulated = useMemo(
     () =>
       calculateStandings(

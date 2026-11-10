@@ -157,6 +157,7 @@ export const useSimulationStore = create<SimulationStore>((set) => ({
     set((state) => {
       const signature = standingsSignature(rows);
       const previousSignature = state.knockoutStandings[championshipId];
+      if (previousSignature === signature) return state;
       const currentScores = state.knockoutScenarios[championshipId] ?? {};
       const scoresAreStale =
         Object.keys(currentScores).length > 0 && previousSignature !== signature;
