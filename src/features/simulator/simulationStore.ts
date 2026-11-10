@@ -1,9 +1,12 @@
 import { create } from "zustand";
-import type { ScoreOverrides } from "../../types";
+import type { ScoreOverrides, StandingRow } from "../../types";
+
+export const standingsSignature = (rows: StandingRow[]) => JSON.stringify(rows);
 
 interface SimulationStore {
   scenarios: Record<string, ScoreOverrides>;
   knockoutScenarios: Record<string, ScoreOverrides>;
+  knockoutStandings: Record<string, string>;
   setScore: (
     championshipId: string,
     matchId: string,
@@ -23,6 +26,7 @@ interface SimulationStore {
   ) => void;
   clearKnockout: (championshipId: string) => void;
   fillKnockout: (championshipId: string) => void;
+  syncKnockoutStandings: (championshipId: string, rows: StandingRow[]) => void;
 }
 
 const readScenarios = (): Record<string, ScoreOverrides> => {
@@ -43,11 +47,22 @@ const readKnockoutScenarios = (): Record<string, ScoreOverrides> => {
 };
 const persistKnockout = (scenarios: Record<string, ScoreOverrides>) =>
   localStorage.setItem("fcpb-knockout-scenarios", JSON.stringify(scenarios));
+const readKnockoutStandings = (): Record<string, string> => {
+  try {
+    return JSON.parse(localStorage.getItem("fcpb-knockout-standings") ?? "{}");
+  } catch {
+    return {};
+  }
+};
+const persistKnockoutStandings = (standings: Record<string, string>) =>
+  localStorage.setItem("fcpb-knockout-standings", JSON.stringify(standings));
 
 export const useSimulationStore = create<SimulationStore>((set) => ({
   scenarios: typeof window === "undefined" ? {} : readScenarios(),
   knockoutScenarios:
     typeof window === "undefined" ? {} : readKnockoutScenarios(),
+  knockoutStandings:
+    typeof window === "undefined" ? {} : readKnockoutStandings(),
   setScore: (championshipId, matchId, score) =>
     set((state) => {
       const scenarios = {
@@ -130,5 +145,24 @@ export const useSimulationStore = create<SimulationStore>((set) => ({
       };
       persistKnockout(knockoutScenarios);
       return { knockoutScenarios };
+    }),
+  syncKnockoutStandings: (championshipId, rows) =>
+    set((state) => {
+      const signature = standingsSignature(rows);
+      const previousSignature = state.knockoutStandings[championshipId];
+      const currentScores = state.knockoutScenarios[championshipId] ?? {};
+      const scoresAreStale =
+        Object.keys(currentScores).length > 0 && previousSignature !== signature;
+      const knockoutScenarios = scoresAreStale
+        ? { ...state.knockoutScenarios, [championshipId]: {} }
+        : state.knockoutScenarios;
+      const knockoutStandings = {
+        ...state.knockoutStandings,
+        [championshipId]: signature,
+      };
+
+      if (scoresAreStale) persistKnockout(knockoutScenarios);
+      persistKnockoutStandings(knockoutStandings);
+      return { knockoutScenarios, knockoutStandings };
     }),
 }));

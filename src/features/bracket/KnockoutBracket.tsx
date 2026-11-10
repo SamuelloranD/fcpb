@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Dices, Eraser, Medal, Trophy } from "lucide-react";
 import placeholder from "../../assets/teams/placeholder.png";
 import { TeamBadge } from "../../components/TeamBadge";
@@ -10,7 +11,7 @@ import {
 } from "../../lib/knockout";
 import type { Score } from "../../lib/knockout";
 import type { StandingRow, Team } from "../../types";
-import { useSimulationStore } from "../simulator/simulationStore";
+import { standingsSignature, useSimulationStore } from "../simulator/simulationStore";
 
 export const isDraw = (score?: Score) =>
   Boolean(score) && score![0] === score![1];
@@ -42,7 +43,16 @@ export function KnockoutBracket({
   championshipId?: string;
 }) {
   const store = useSimulationStore();
-  const scores = store.knockoutScenarios[championshipId] ?? {};
+  const syncKnockoutStandings = useSimulationStore(
+    (state) => state.syncKnockoutStandings,
+  );
+  const signature = standingsSignature(rows);
+  const scores = store.knockoutStandings[championshipId] === signature
+    ? (store.knockoutScenarios[championshipId] ?? {})
+    : {};
+  useEffect(() => {
+    syncKnockoutStandings(championshipId, rows);
+  }, [championshipId, rows, syncKnockoutStandings]);
   const [firstSemi, secondSemi] = buildKnockoutBracket(rows).semifinals;
   const getTeam = (id: string) => teams.find((team) => team.id === id)!;
   const positions = Object.fromEntries(
