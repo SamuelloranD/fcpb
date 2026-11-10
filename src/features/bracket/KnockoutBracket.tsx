@@ -133,6 +133,7 @@ export function KnockoutBracket({
         <span className="flex shrink-0 gap-1">
           <ScoreInput
             className={scoreInputWidth(showPenalties)}
+            showStepper={false}
             value={scores[matchId]?.[index] ?? ""}
             onChange={(value) => setScore(matchId, index, value)}
             ariaLabel={`Placar de ${knockoutTeamName(getTeam(teamId))}`}
@@ -141,6 +142,7 @@ export function KnockoutBracket({
             <ScoreInput
               className={scoreInputWidth(true)}
               inputClassName="border-amber-300 bg-amber-100 text-amber-950"
+              showStepper={false}
               value={scores[penaltyMatchId]?.[index] ?? ""}
               onChange={(value) => setScore(penaltyMatchId, index, value)}
               ariaLabel={`Pênaltis - ${knockoutTeamName(getTeam(teamId))}`}

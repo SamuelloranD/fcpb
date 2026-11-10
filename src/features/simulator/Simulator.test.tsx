@@ -33,6 +33,8 @@ describe("Simulator", () => {
     expect(html).toContain('aria-label="Abrir simulador de rodadas"');
     expect(html).toContain("hidden xl:block");
     expect(html).toContain("xl:hidden");
+    expect(html).not.toContain("Aumentar placar");
+    expect(html).not.toContain("Diminuir placar");
   });
 
   it("creates knockout scores when Sortear is used", () => {
