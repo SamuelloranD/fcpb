@@ -3,6 +3,9 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 export const stepScore = (value: number, delta: 1 | -1) =>
   Math.max(0, value + delta);
 
+const normalizeScore = (value: string) =>
+  value.replace(/\D/g, "").slice(0, 2).replace(/^0+(?=\d)/, "");
+
 export function ScoreInput({
   value,
   onChange,
@@ -30,9 +33,11 @@ export function ScoreInput({
         aria-label={ariaLabel}
         disabled={disabled}
         className={`h-full w-full appearance-none rounded border bg-[var(--bg)] p-0 text-center font-black [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${inputClassName}`}
-        type="number"
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => onChange(normalizeScore(event.target.value))}
         onFocus={(event) => { if (selectOnFocus) event.currentTarget.select(); }}
       />
       {!disabled && showStepper && (
