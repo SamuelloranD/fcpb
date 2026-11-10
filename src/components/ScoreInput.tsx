@@ -11,7 +11,7 @@ export function ScoreInput({
   inputClassName = "",
   ariaLabel,
   showStepper = true,
-  selectOnFocus = false,
+  selectOnFocus = true,
 }: {
   value: number | string;
   onChange: (value: string) => void;

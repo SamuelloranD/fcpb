@@ -176,6 +176,7 @@ function RoundMatch({
         </div>
         <ScoreInput
           disabled={locked}
+          showStepper={false}
           value={homeValue}
           onChange={(value) => update(0, value)}
           ariaLabel={`Placar do ${home.name}`}
@@ -183,6 +184,7 @@ function RoundMatch({
         <span>×</span>
         <ScoreInput
           disabled={locked}
+          showStepper={false}
           value={awayValue}
           onChange={(value) => update(1, value)}
           ariaLabel={`Placar do ${away.name}`}

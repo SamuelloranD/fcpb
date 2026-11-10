@@ -4,6 +4,20 @@ import { copaMatches, copaParaiba, copaTeams } from "../../data/copaParaiba";
 import { RoundsPanel } from "./RoundsPanel";
 
 describe("RoundsPanel", () => {
+  it("keeps desktop score entry keyboard-only", () => {
+    const scheduledMatch = copaMatches.find((match) => match.status === "scheduled")!;
+    const html = renderToStaticMarkup(
+      <RoundsPanel
+        championship={copaParaiba}
+        teams={copaTeams}
+        matches={[scheduledMatch]}
+      />,
+    );
+
+    expect(html).not.toContain("Aumentar placar");
+    expect(html).not.toContain("Diminuir placar");
+  });
+
   it("renders compact matches with crests and scores but without club names", () => {
     const html = renderToStaticMarkup(
       <RoundsPanel
