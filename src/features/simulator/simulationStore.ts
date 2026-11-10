@@ -36,8 +36,15 @@ const readScenarios = (): Record<string, ScoreOverrides> => {
     return {};
   }
 };
+const writeStorage = (key: string, value: unknown) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // The simulation remains usable when browser storage is unavailable.
+  }
+};
 const persist = (scenarios: Record<string, ScoreOverrides>) =>
-  localStorage.setItem("fcpb-scenarios", JSON.stringify(scenarios));
+  writeStorage("fcpb-scenarios", scenarios);
 const readKnockoutScenarios = (): Record<string, ScoreOverrides> => {
   try {
     return JSON.parse(localStorage.getItem("fcpb-knockout-scenarios") ?? "{}");
@@ -46,7 +53,7 @@ const readKnockoutScenarios = (): Record<string, ScoreOverrides> => {
   }
 };
 const persistKnockout = (scenarios: Record<string, ScoreOverrides>) =>
-  localStorage.setItem("fcpb-knockout-scenarios", JSON.stringify(scenarios));
+  writeStorage("fcpb-knockout-scenarios", scenarios);
 const readKnockoutStandings = (): Record<string, string> => {
   try {
     return JSON.parse(localStorage.getItem("fcpb-knockout-standings") ?? "{}");
@@ -55,7 +62,7 @@ const readKnockoutStandings = (): Record<string, string> => {
   }
 };
 const persistKnockoutStandings = (standings: Record<string, string>) =>
-  localStorage.setItem("fcpb-knockout-standings", JSON.stringify(standings));
+  writeStorage("fcpb-knockout-standings", standings);
 
 export const useSimulationStore = create<SimulationStore>((set) => ({
   scenarios: typeof window === "undefined" ? {} : readScenarios(),

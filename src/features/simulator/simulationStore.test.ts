@@ -47,4 +47,24 @@ describe("simulationStore", () => {
 
     expect(useSimulationStore.getState().knockoutScenarios[championshipId]).toEqual({});
   });
+
+  it("keeps the simulator available when browser storage is blocked", () => {
+    Object.defineProperty(globalThis, "localStorage", {
+      configurable: true,
+      value: {
+        getItem: () => {
+          throw new Error("Storage blocked");
+        },
+        setItem: () => {
+          throw new Error("Storage blocked");
+        },
+      },
+    });
+
+    expect(() =>
+      useSimulationStore
+        .getState()
+        .syncKnockoutStandings(championshipId, initialStandings),
+    ).not.toThrow();
+  });
 });
