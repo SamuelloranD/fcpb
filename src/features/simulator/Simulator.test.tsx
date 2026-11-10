@@ -8,6 +8,7 @@ import {
   hasAggregateDraw,
   isDraw,
   knockoutTeamName,
+  finalPenaltyScoreInFirstLegOrder,
   runnerUpTeamId,
   scoreInputWidth,
 } from "../bracket/KnockoutBracket";
@@ -66,6 +67,10 @@ describe("Simulator", () => {
   it("identifies tied final aggregates after the return leg", () => {
     expect(hasAggregateDraw([1, 1], [2, 2])).toBe(true);
     expect(hasAggregateDraw([1, 0], [2, 0])).toBe(false);
+  });
+
+  it("uses the return-leg penalty order to decide the correct finalist", () => {
+    expect(finalPenaltyScoreInFirstLegOrder([5, 4])).toEqual([4, 5]);
   });
 
   it("reduces both score inputs whenever penalties are shown", () => {

@@ -18,6 +18,8 @@ export const isDraw = (score?: Score) =>
 export const hasAggregateDraw = (firstLeg?: Score, returnLeg?: Score) =>
   Boolean(firstLeg && returnLeg) &&
   firstLeg![0] + returnLeg![1] === firstLeg![1] + returnLeg![0];
+export const finalPenaltyScoreInFirstLegOrder = (penalties?: Score) =>
+  penalties ? ([penalties[1], penalties[0]] as Score) : undefined;
 export const scoreInputWidth = (showPenalties?: boolean) =>
   showPenalties ? "w-8" : "w-10";
 export const knockoutTeamName = (team: Team) =>
@@ -88,7 +90,7 @@ export function KnockoutBracket({
           returnLegHome,
           scores.f1,
           scores.f2,
-          scores["f1-p"],
+          finalPenaltyScoreInFirstLegOrder(scores["f1-p"]),
         )
       : null;
   const runnerUp = runnerUpTeamId(champion, firstLegHome, returnLegHome);
