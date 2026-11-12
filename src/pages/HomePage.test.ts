@@ -11,7 +11,7 @@ describe("getHomeTournamentState", () => {
     );
 
     expect(snapshot.leader.name).toBe("Serra Branca");
-    expect(snapshot.nextRound).toBe(2);
+    expect(snapshot.nextRound).toBe(3);
     expect(snapshot.topFour).toHaveLength(4);
     expect(snapshot.upcomingMatches).toHaveLength(3);
   });
@@ -27,5 +27,16 @@ describe("getHomeTournamentState", () => {
     expect(abbreviate("esporte-patos", "Esporte-PB")).toBe("ESP");
     expect(abbreviate("nacional-patos", "Nacional de Patos")).toBe("NAP");
     expect(abbreviate("atletico-pb", "Atlético-PB")).toBe("ATL");
+  });
+
+  it("labels the completed and upcoming rounds from the current round", () => {
+    const labels = (HomePage as typeof HomePage & {
+      homeRoundLabels: (round: number) => { completed: string; upcoming: string };
+    }).homeRoundLabels(2);
+
+    expect(labels).toEqual({
+      completed: "2ª rodada concluída",
+      upcoming: "3ª rodada",
+    });
   });
 });

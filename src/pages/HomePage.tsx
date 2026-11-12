@@ -26,6 +26,11 @@ const compactClubNames: Record<string, string> = {
 export const compactClubName = (teamId: string, name: string) =>
   compactClubNames[teamId] ?? name;
 
+export const homeRoundLabels = (round: number) => ({
+  completed: `${round}ª rodada concluída`,
+  upcoming: `${round + 1}ª rodada`,
+});
+
 export function getHomeTournamentState(
   teams: Team[],
   matches: Match[],
@@ -80,6 +85,7 @@ export function HomePage() {
 
   const state = getHomeTournamentState(copaTeams, games.data, copaParaiba.tiebreakers);
   const team = (id: string) => copaTeams.find((item) => item.id === id)!;
+  const roundLabels = homeRoundLabels(copaParaiba.currentRound);
 
   return (
     <div className="space-y-7">
@@ -91,7 +97,7 @@ export function HomePage() {
         </div>
         <div className="relative z-10">
         <p className="mb-3 flex items-center gap-2 text-sm font-bold text-emerald-200">
-          <Trophy size={16} /> Copa Paraíba 2026 · 1ª rodada concluída
+          <Trophy size={16} /> Copa Paraíba 2026 · {roundLabels.completed}
         </p>
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
@@ -130,7 +136,7 @@ export function HomePage() {
         <section className="panel p-3 sm:p-4">
           <div className="mb-3 flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-emerald-700">2ª rodada</p>
+              <p className="text-xs font-bold uppercase tracking-wide text-emerald-700">{roundLabels.upcoming}</p>
               <h2 className="text-xl font-black">Próximos jogos</h2>
             </div>
             <CalendarDays className="text-emerald-700" size={20} />
